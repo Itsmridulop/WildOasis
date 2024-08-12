@@ -1,1 +1,2 @@
-# WildOasis
+# WildOasis // hotel management app
+
