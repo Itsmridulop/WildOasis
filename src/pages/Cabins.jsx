@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import {getCabin} from '../services/apiCabin'
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 
