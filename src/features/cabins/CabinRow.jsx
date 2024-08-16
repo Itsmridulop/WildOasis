@@ -1,6 +1,7 @@
 import { formatCurrency } from '../../utils/helpers'
 import { useState } from 'react';
 import { useDeleteCabin } from './useDeleteCabin';
+import { HiTrash, HiPencil, HiSquare2Stack } from 'react-icons/hi2';
 
 import styled from "styled-components";
 import CreateCabinForm from './CreateCabinForm';
@@ -58,8 +59,9 @@ function CabinRow({ cabin }) {
         <Price>{formatCurrency(price)}</Price>
         {discount ? <Discount>{formatCurrency(discount)}</Discount> : <span>&mdash; </span>}
         <div>
-          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>{isDeleting ? 'Deleting....' : 'Delete'}</button>
-          <button onClick={() => setShowForm(show => !show)} >Edit</button>
+          <button><HiSquare2Stack/></button>
+          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}><HiTrash/></button>
+          <button onClick={() => setShowForm(show => !show)} ><HiPencil/></button>
         </div>
       </TableRow>
       {showForm && <CreateCabinForm cabinToEdit={cabin} />}

@@ -10,7 +10,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import toast from "react-hot-toast";
 
-const FormRow = styled.div`
+export const FormRow = styled.div`
   display: grid;
   align-items: center;
   grid-template-columns: 24rem 1fr 1.2fr;
@@ -37,7 +37,7 @@ const FormRow = styled.div`
   }
 `;
 
-const Label = styled.label`
+export const Label = styled.label`
   font-weight: 500;
 `;
 
@@ -82,14 +82,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="maxCapacity">Maximum capacity</Label>
+        <Label htmlFor="max_capacity">Maximum capacity</Label>
         <Input type="number" id="max_capacity" {...register('max_capacity', {
-          required: 'This field is required!!!',
-          min: {
-            value: 1,
-            message: 'Minimum capacity should be 1'
-          }
-        })} />
+          required: 'This field is required!!!'
+        })}/>
         {errors?.max_capacity?.message && <Error>{errors.max_capacity.message}</Error>}
       </FormRow>
 
