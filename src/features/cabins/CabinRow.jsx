@@ -1,4 +1,9 @@
+import { formatCurrency } from '../../utils/helpers'
+import { useState } from 'react';
+import { useDeleteCabin } from './useDeleteCabin';
+
 import styled from "styled-components";
+import CreateCabinForm from './CreateCabinForm';
 
 const TableRow = styled.div`
   display: grid;
@@ -38,3 +43,28 @@ const Discount = styled.div`
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+function CabinRow({ cabin }) {
+  const [showForm, setShowForm] = useState(false)
+  const { id: cabinId, name, max_capacity, price, discount, image } = cabin
+  const {isDeleting, deleteCabin} = useDeleteCabin()
+
+  return (
+    <>
+      <TableRow role="row">
+        <Img src={image} alt={name} />
+        <Cabin>{name}</Cabin>
+        <div>{max_capacity}</div>
+        <Price>{formatCurrency(price)}</Price>
+        {discount ? <Discount>{formatCurrency(discount)}</Discount> : <span>&mdash; </span>}
+        <div>
+          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>{isDeleting ? 'Deleting....' : 'Delete'}</button>
+          <button onClick={() => setShowForm(show => !show)} >Edit</button>
+        </div>
+      </TableRow>
+      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+    </>
+  )
+}
+
+export default CabinRow

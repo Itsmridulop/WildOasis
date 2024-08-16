@@ -1,10 +1,14 @@
-import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import { useCreateCabin } from "./useCreateCabin";
+import { useEditCabin } from "./useEditCabin";
 
+import styled from "styled-components";
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
+import toast from "react-hot-toast";
 
 const FormRow = styled.div`
   display: grid;
@@ -42,45 +46,95 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm() {
+function CreateCabinForm({ cabinToEdit = {} }) {
+  const { id: editCabinId, ...editValues } = cabinToEdit
+  const isEdit = Boolean(editCabinId)
+  const { register, handleSubmit, reset, getValues, formState } = useForm({
+    defaultValues: isEdit ? editValues : {}
+  })
+  const {createCabin, isAdding} = useCreateCabin()
+  const {editCabin, isEditing} = useEditCabin()
+  const { errors } = formState
+
+  const onSubmit = data => {
+    const image = typeof data.image === 'string' ? data.image : data.image[0]
+    if(isEdit) editCabin({newCabinData: {...data, image}, id: editCabinId}, {
+      onSuccess: () => reset()
+    })
+    else createCabin({ ...data, image }, {
+      onSuccess: () => reset()
+    })
+  }
+
+  const onError = error => {
+    toast.error('There wwas some error in submittion of form!!!')
+    console.error(error.message)
+  }
+
   return (
-    <Form>
-      <FormRow>
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <FormRow label="cabin Name">
         <Label htmlFor="name">Cabin name</Label>
-        <Input type="text" id="name" />
+        <Input type="text" id="name" {...register('name', {
+          required: 'This field is required!!!'
+        })} />
+        {errors?.name?.message && <Error>{errors.name.message}</Error>}
       </FormRow>
 
       <FormRow>
         <Label htmlFor="maxCapacity">Maximum capacity</Label>
-        <Input type="number" id="maxCapacity" />
+        <Input type="number" id="max_capacity" {...register('max_capacity', {
+          required: 'This field is required!!!',
+          min: {
+            value: 1,
+            message: 'Minimum capacity should be 1'
+          }
+        })} />
+        {errors?.max_capacity?.message && <Error>{errors.max_capacity.message}</Error>}
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="regularPrice">Regular price</Label>
-        <Input type="number" id="regularPrice" />
+        <Label htmlFor="price">Price</Label>
+        <Input type="number" id="price" {...register('price', {
+          required: 'This field is required!!!',
+          min: {
+            value: 1,
+            message: 'Minimum price should be 1'
+          }
+        })} />
+        {errors?.price?.message && <Error>{errors.price.message}</Error>}
       </FormRow>
 
       <FormRow>
         <Label htmlFor="discount">Discount</Label>
-        <Input type="number" id="discount" defaultValue={0} />
+        <Input type="number" id="discount" defaultValue={0} {...register('discount', {
+          validate: value => {
+            if (value > getValues().price) return 'Discount should be lesser than price!!!';
+          }
+        })} />
+        {errors?.discount?.message && <Error>{errors.discount.message}</Error>}
       </FormRow>
 
       <FormRow>
         <Label htmlFor="description">Description for website</Label>
-        <Textarea type="number" id="description" defaultValue="" />
+        <Textarea type="number" id="description" defaultValue="" {...register('description')} />
       </FormRow>
 
       <FormRow>
         <Label htmlFor="image">Cabin photo</Label>
-        <FileInput id="image" accept="image/*" />
+        <FileInput id="image" accept="image/*" {...register('image', {
+          required: isEdit ? false : 'This field is required!!!'
+        })} />
       </FormRow>
 
       <FormRow>
-        {/* type is an HTML attribute! */}
         <Button variation="secondary" type="reset">
           Cancel
-        </Button>
-        <Button>Edit cabin</Button>
+        </Button> 
+        {isEdit ?
+          <Button disabled={isEditing}>{isEditing ? 'Editing...' : `Edit Cabin`}</Button> :
+          <Button disabled={isAdding}>{isAdding ? 'Adding...' : 'Add cabin'}</Button>
+        }
       </FormRow>
     </Form>
   );
