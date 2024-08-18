@@ -46,7 +46,7 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onClose }) {
   const { id: editCabinId, ...editValues } = cabinToEdit
   const isEdit = Boolean(editCabinId)
   const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -59,7 +59,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const onSubmit = data => {
     const image = typeof data.image === 'string' ? data.image : data.image[0]
     if(isEdit) editCabin({newCabinData: {...data, image}, id: editCabinId}, {
-      onSuccess: () => reset()
+      onSuccess: () => {
+        reset()
+        onClose?.()
+      }
     })
     else createCabin({ ...data, image }, {
       onSuccess: () => reset()
@@ -72,7 +75,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)} type={onClose ? 'modal' : ''}>
       <FormRow label="cabin Name">
         <Label htmlFor="name">Cabin name</Label>
         <Input type="text" id="name" {...register('name', {
@@ -124,7 +127,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       </FormRow>
 
       <FormRow>
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" onClick={() => onClose?.()}>
           Cancel
         </Button> 
         {isEdit ?
