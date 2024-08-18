@@ -1,10 +1,11 @@
 import { formatCurrency } from '../../utils/helpers'
-import { useState } from 'react';
 import { useDeleteCabin } from './useDeleteCabin';
 import { HiTrash, HiPencil, HiSquare2Stack } from 'react-icons/hi2';
 
 import styled from "styled-components";
 import CreateCabinForm from './CreateCabinForm';
+import Modal from '../../ui/Modal';
+import ConfirmDelete from '../../ui/ConfirmDelete';
 
 const TableRow = styled.div`
   display: grid;
@@ -46,9 +47,8 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
-  const [showForm, setShowForm] = useState(false)
   const { id: cabinId, name, max_capacity, price, discount, image } = cabin
-  const {isDeleting, deleteCabin} = useDeleteCabin()
+  const { isDeleting, deleteCabin } = useDeleteCabin()
 
   return (
     <>
@@ -59,12 +59,28 @@ function CabinRow({ cabin }) {
         <Price>{formatCurrency(price)}</Price>
         {discount ? <Discount>{formatCurrency(discount)}</Discount> : <span>&mdash; </span>}
         <div>
-          <button><HiSquare2Stack/></button>
-          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}><HiTrash/></button>
-          <button onClick={() => setShowForm(show => !show)} ><HiPencil/></button>
+          <Modal>
+            <Modal.Open opens='edit-cabin'>
+              <button>
+                <HiPencil />
+              </button>
+            </Modal.Open>
+            <Modal.Window name='edit-cabin'>
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Modal.Window>
+            <Modal.Open opens='confirm-delete'>
+              <button>
+                <HiTrash />
+              </button>
+            </Modal.Open>
+            <Modal.Window name='confirm-delete'>
+              <ConfirmDelete resourceName='Cabin' onConfirm={() => deleteCabin(cabinId)} disabled={isDeleting} />
+            </Modal.Window>
+          </Modal>
+
+          <button onClick={() => setShowForm(show => !show)} ><HiSquare2Stack /></button>
         </div>
       </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
     </>
   )
 }

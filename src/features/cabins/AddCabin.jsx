@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 import Button from '../../ui/Button'
 import CreateCabinForm from '../cabins/CreateCabinForm'
 import Modal from "../../ui/Modal"
