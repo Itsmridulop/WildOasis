@@ -1,14 +1,21 @@
 import { useCabin } from './useCabin';
+import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Table from '../../ui/Table'
 import Spinner from '../../ui/Spinner'
 import CabinRow from "./CabinRow";
 import Menus from '../../ui/Menus'
-import { useSearchParams } from 'react-router-dom';
 
 function CabinTable() {
   const { cabins, isLoading } = useCabin()
-  const [searchParams] = useSearchParams()
+  const [searchParams] = useSearchParams({filter: 'all', sortBy: 'name-asc'})
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    navigate(`/cabins?filter=${searchParams.get('filter')}&sortBy=${searchParams.get('sortBy')}`)
+  }, [])
+
   const sortBy = searchParams.get('sortBy')
   const [field, direction] = sortBy.split('-')
 

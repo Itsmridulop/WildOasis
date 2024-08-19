@@ -5,12 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
 
 function CabinTableOperation() {
-  const [searchParams] = useSearchParams({filter: 'all', sortBy: 'name-asc'})
-  const navigate = useNavigate()
 
-  useEffect(() => {
-    navigate(`/cabins?filter=${searchParams.get('filter')}&sortBy=${searchParams.get('sortBy')}`)
-  }, [])
 
   return (
     <TableOperations>
