@@ -34,7 +34,7 @@ function App() {
             <Route index element={<Navigate replace to='/dashboard' />} />
             <Route exact path="/dashboard" element={<Dashboard />} />
             <Route exact path="/bookings" element={<Bookings />} />
-            <Route exact path="/cabins" element={<Cabins />} />
+            <Route exact path='/cabins' element={<Cabins />} />
             <Route exact path="/users" element={<Users />} />
             <Route exact path="/settings" element={<Settings />} />
             <Route exact path="/account" element={<Account />} />

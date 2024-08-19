@@ -53,25 +53,26 @@ const Button = styled.button`
   }
 `;
 
-const ModalContext = createContext()
+const ModalContext = createContext();
 
 function Modal({ children }) {
-  const [openName, setOpenName] = useState('')
+  const [openName, setOpenName] = useState("");
 
-  const open = setOpenName
-  const close = () => setOpenName('')
+  const open = setOpenName;
+  const close = () => setOpenName("");
 
-  return <ModalContext.Provider value={{ openName, open, close }}>
-    {children}
-  </ModalContext.Provider>
+  return (
+    <ModalContext.Provider value={{ openName, open, close }}>
+      {children}
+    </ModalContext.Provider>
+  );
 }
 
-
 function Window({ children, name }) {
-  const { close, openName } = useContext(ModalContext)
-  const { ref } = useOutsideClick(close)
+  const { close, openName } = useContext(ModalContext);
+  const { ref } = useOutsideClick(close);
 
-  if (name !== openName) return null
+  if (name !== openName) return null;
 
   return (
     <Overlay>
@@ -82,16 +83,15 @@ function Window({ children, name }) {
         {cloneElement(children, { onClose: close })}
       </StyledModal>
     </Overlay>
-  )
+  );
 }
-
 
 function Open({ children, opens: openWindowName }) {
-  const { open } = useContext(ModalContext)
-  return cloneElement(children, { onClick: () => open(openWindowName) })
+  const { open } = useContext(ModalContext);
+  return cloneElement(children, { onClick: () => open(openWindowName) });
 }
 
-Modal.Open = Open
-Modal.Window = Window
+Modal.Open = Open;
+Modal.Window = Window;
 
-export default Modal
+export default Modal;

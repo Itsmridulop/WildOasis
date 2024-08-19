@@ -4,11 +4,22 @@ import Table from '../../ui/Table'
 import Spinner from '../../ui/Spinner'
 import CabinRow from "./CabinRow";
 import Menus from '../../ui/Menus'
+import { useSearchParams } from 'react-router-dom';
 
 function CabinTable() {
   const { cabins, isLoading } = useCabin()
+  const [searchParams] = useSearchParams()
+  const sortBy = searchParams.get('sortBy')
+  const [field, direction] = sortBy.split('-')
 
   if (isLoading) return <Spinner />
+
+  let filteredCabin = cabins
+  const modifier = direction === 'desc' ? -1 : 1
+
+  if (searchParams.get('filter') === 'no-discount') filteredCabin = cabins.filter(cabin => cabin.discount === 0)
+  if (searchParams.get('filter') === 'with-discount') filteredCabin = cabins.filter(cabin => cabin.discount > 0)
+  filteredCabin = filteredCabin.sort((a, b) => (a[field] - b[field]) * modifier )
 
   return (
     <Menus>
@@ -21,7 +32,7 @@ function CabinTable() {
           <div>Discount</div>
           <div></div>
         </Table.Header>
-        <Table.Body data={cabins} render={cabin => <CabinRow key={cabin.id} cabin={cabin} />} />
+        <Table.Body data={filteredCabin} render={cabin => <CabinRow key={cabin.id} cabin={cabin} />} />
       </Table>
     </Menus>
   )

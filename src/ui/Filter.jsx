@@ -1,3 +1,5 @@
+import { RiFileChart2Fill } from "react-icons/ri";
+import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 const StyledFilter = styled.div`
@@ -33,3 +35,22 @@ const FilterButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+function Filter() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchParamsObj = {filter: searchParams.get('filter'), sortBy: searchParams.get('sortBy')}
+  const handleClick = value => {
+
+    setSearchParams({...searchParamsObj, filter: value})
+  }
+
+  return (
+    <StyledFilter>
+      <FilterButton active={searchParams.get('filter') === 'all'} onClick={() => handleClick('all')}>All</FilterButton>
+      <FilterButton active={searchParams.get('filter') === 'no-discount'} onClick={() => handleClick('no-discount')}>No Discount</FilterButton>
+      <FilterButton active={searchParams.get('filter') === 'with-discount'} onClick={() => handleClick('with-discount')}>With Discount</FilterButton>
+    </StyledFilter>
+  )
+}
+
+export default Filter

@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState, useSyncExternalStore } from "react";
 import { HiEllipsisVertical } from "react-icons/hi2";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 import styled from "styled-components";
-import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const Menu = styled.div`
   display: flex;
