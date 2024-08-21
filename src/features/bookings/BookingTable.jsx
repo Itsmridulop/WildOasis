@@ -1,14 +1,14 @@
 import { useBookings } from './useBookings'
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import Spinner from '../../ui/Spinner';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
 
 function BookingTable() {
-  const [searchParams] = useSearchParams({ filter: 'all', sortBy: 'start_data-desc' })
+  const [searchParams] = useSearchParams({ filter: 'all', sortBy: 'start_date-desc' })
   const { bookings, isLoading } = useBookings()
   const navigate = useNavigate()
 
@@ -17,26 +17,6 @@ function BookingTable() {
   }, [])
 
   if (isLoading) return <Spinner />
-
-  // const processedBooking = bookings.map(booking => {
-  //   return {
-  //     ...booking,
-  //     start_date: booking.start_date.split('T')[0].split('-').join('')
-  //   }
-  // })
-
-
-  // const sortBy = searchParams.get('sortBy')
-  // const [field, value] = sortBy.split('-')
-  // const modifier = value === 'desc' ? -1 : 1
-  // const filterBy = searchParams.get('filter')
-  // let filteredBooking = bookings
-
-  // if (filterBy === 'checked-out') filteredBooking = processedBooking.filter(booking => booking.status === 'checked-out')
-  // if (filterBy === 'checked-in') filteredBooking = processedBooking.filter(booking => booking.status === 'checked-in')
-  // if (filterBy === 'unconfirmed') filteredBooking = processedBooking.filter(booking => booking.status === 'unconfirmed')
-  
-  // filteredBooking = filteredBooking.sort((a,b) => (a[field] - b[field]) * modifier)
 
   return (
     <Menus>
