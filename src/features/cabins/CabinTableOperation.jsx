@@ -1,15 +1,15 @@
 import TableOperations from '../../ui/TableOperations'
 import Filter from '../../ui/Filter'
 import SortBy from '../../ui/SortBy'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useEffect } from 'react'
 
 function CabinTableOperation() {
-
-
   return (
     <TableOperations>
-      <Filter />
+      <Filter from='cabin' options={[
+        { value: "all", label: "All" },
+        { value: "no-discount", label: "No Discount" },
+        { value: "with-discount", label: "With Discount" }
+      ]} />
       <SortBy options={[
         { value: 'name-asc', label: 'By name (A-Z)' },
         { value: 'name-desc', label: 'By name (Z-A)' },

@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { isFuture, isPast, isToday } from "date-fns";
-import supabase from "../services/supabase";
-import Button from "../ui/Button";
 import { subtractDates } from "../utils/helpers";
-
 import { bookings } from "./data-bookings";
 import { cabins } from "./data-cabins";
 import { guests } from "./data-guests";
 
+import supabase from "../services/supabase";
+import Button from "../ui/Button";
 // const originalSettings = {
 //   minBookingLength: 3,
 //   maxBookingLength: 30,
@@ -21,7 +20,7 @@ async function deleteGuests() {
 }
 
 async function deleteCabins() {
-  const { error } = await supabase.from("cabins").delete().gt("id", 0);
+  const { error } = await supabase.from("cabin").delete().gt("id", 0);
   if (error) console.log(error.message);
 }
 
@@ -36,65 +35,61 @@ async function createGuests() {
 }
 
 async function createCabins() {
-  const { error } = await supabase.from("cabins").insert(cabins);
-  if (error) console.log(error.message);
+  const { error } = await supabase.from("cabin").insert(cabins);
+  if (error) console.log(error);
 }
 
 async function createBookings() {
-  // Bookings need a guestId and a cabinId. We can't tell Supabase IDs for each object, it will calculate them on its own. So it might be different for different people, especially after multiple uploads. Therefore, we need to first get all guestIds and cabinIds, and then replace the original IDs in the booking data with the actual ones from the DB
+
   const { data: guestsIds } = await supabase
     .from("guests")
     .select("id")
     .order("id");
   const allGuestIds = guestsIds.map((cabin) => cabin.id);
   const { data: cabinsIds } = await supabase
-    .from("cabins")
+    .from("cabin")
     .select("id")
     .order("id");
   const allCabinIds = cabinsIds.map((cabin) => cabin.id);
-
   const finalBookings = bookings.map((booking) => {
-    // Here relying on the order of cabins, as they don't have and ID yet
-    const cabin = cabins.at(booking.cabinId - 1);
-    const numNights = subtractDates(booking.endDate, booking.startDate);
-    const cabinPrice = numNights * (cabin.regularPrice - cabin.discount);
-    const extrasPrice = booking.hasBreakfast
-      ? numNights * 15 * booking.numGuests
-      : 0; // hardcoded breakfast price
-    const totalPrice = cabinPrice + extrasPrice;
+    const cabin = cabins.at(booking.cabin_id - 1);
+    const number_night = subtractDates(booking.end_date, booking.start_date);
+    const cabin_price = number_night * (cabin.price - cabin.discount);
+    const extra_price = booking.has_breakfast
+      ? number_night * 15 * booking.number_guests
+      : 0; 
+    const total_price = cabin_price + extra_price;
 
     let status;
     if (
-      isPast(new Date(booking.endDate)) &&
-      !isToday(new Date(booking.endDate))
+      isPast(new Date(booking.end_date)) &&
+      !isToday(new Date(booking.end_date))
     )
       status = "checked-out";
     if (
-      isFuture(new Date(booking.startDate)) ||
-      isToday(new Date(booking.startDate))
+      isFuture(new Date(booking.start_date)) ||
+      isToday(new Date(booking.start_date))
     )
       status = "unconfirmed";
     if (
-      (isFuture(new Date(booking.endDate)) ||
-        isToday(new Date(booking.endDate))) &&
-      isPast(new Date(booking.startDate)) &&
-      !isToday(new Date(booking.startDate))
+      (isFuture(new Date(booking.end_date)) ||
+        isToday(new Date(booking.end_date))) &&
+      isPast(new Date(booking.start_date)) &&
+      !isToday(new Date(booking.start_date))
     )
       status = "checked-in";
 
     return {
       ...booking,
-      numNights,
-      cabinPrice,
-      extrasPrice,
-      totalPrice,
-      guestId: allGuestIds.at(booking.guestId - 1),
-      cabinId: allCabinIds.at(booking.cabinId - 1),
+      number_night,
+      cabin_price,
+      extra_price,
+      total_price,
+      guests_id: allGuestIds.at(booking.guests_id - 1),
+      cabin_id: allCabinIds.at(booking.cabin_id - 1),
       status,
     };
   });
-
-  console.log(finalBookings);
 
   const { error } = await supabase.from("bookings").insert(finalBookings);
   if (error) console.log(error.message);
@@ -105,16 +100,12 @@ function Uploader() {
 
   async function uploadAll() {
     setIsLoading(true);
-    // Bookings need to be deleted FIRST
     await deleteBookings();
     await deleteGuests();
     await deleteCabins();
-
-    // Bookings need to be created LAST
     await createGuests();
     await createCabins();
     await createBookings();
-
     setIsLoading(false);
   }
 

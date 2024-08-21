@@ -1,5 +1,5 @@
-import { RiFileChart2Fill } from "react-icons/ri";
 import { useSearchParams } from "react-router-dom";
+
 import styled, { css } from "styled-components";
 
 const StyledFilter = styled.div`
@@ -26,7 +26,6 @@ const FilterButton = styled.button`
   border-radius: var(--border-radius-sm);
   font-weight: 500;
   font-size: 1.4rem;
-  /* To give the same height as select */
   padding: 0.44rem 0.8rem;
   transition: all 0.3s;
 
@@ -36,19 +35,17 @@ const FilterButton = styled.button`
   }
 `;
 
-function Filter() {
+function Filter({ options, from }) {
   const [searchParams, setSearchParams] = useSearchParams()
-  const searchParamsObj = {filter: searchParams.get('filter'), sortBy: searchParams.get('sortBy')}
-  const handleClick = value => {
+  const searchParamsObj = { filter: searchParams.get('filter'), sortBy: searchParams.get('sortBy') }
 
-    setSearchParams({...searchParamsObj, filter: value})
+  const handleClick = value => {
+    setSearchParams({ ...searchParamsObj, filter: value })
   }
 
   return (
     <StyledFilter>
-      <FilterButton active={searchParams.get('filter') === 'all'} onClick={() => handleClick('all')}>All</FilterButton>
-      <FilterButton active={searchParams.get('filter') === 'no-discount'} onClick={() => handleClick('no-discount')}>No Discount</FilterButton>
-      <FilterButton active={searchParams.get('filter') === 'with-discount'} onClick={() => handleClick('with-discount')}>With Discount</FilterButton>
+      {options.map(option => <FilterButton key={from} active={searchParams.get('filter') === option.value} onClick={() => handleClick(option.value)}>{option.label}</FilterButton>)}
     </StyledFilter>
   )
 }
