@@ -6,14 +6,15 @@ import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import Spinner from '../../ui/Spinner';
+import Pagination from '../../ui/Pagination';
 
 function BookingTable() {
-  const [searchParams] = useSearchParams({ filter: 'all', sortBy: 'start_date-desc' })
-  const { bookings, isLoading } = useBookings()
+  const [searchParams] = useSearchParams({ filter: 'all', sortBy: 'start_date-desc', page: 1 })
+  const { bookings, isLoading, count } = useBookings()
   const navigate = useNavigate()
 
   useEffect(() => {
-    navigate(`/bookings?filter=${searchParams.get('filter')}&sortBy=${searchParams.get('sortBy')}`)
+    navigate(`/bookings?filter=${searchParams.get('filter')}&sortBy=${searchParams.get('sortBy')}&page=${searchParams.get('page')}`)
   }, [])
 
   if (isLoading) return <Spinner />
@@ -34,6 +35,9 @@ function BookingTable() {
         )}
         />
       </Table>
+      <Table.Footer>
+        <Pagination count={count} />
+      </Table.Footer>
     </Menus>
   );
 }

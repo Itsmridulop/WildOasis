@@ -1,4 +1,7 @@
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
+import { useSearchParams } from "react-router-dom";
+import { PAGE_SIZE } from "../utils/constants";
+
 import styled from "styled-components";
 
 const StyledPagination = styled.div`
@@ -17,7 +20,7 @@ const P = styled.p`
   }
 `;
 
- const PaginationButton = styled.button`
+const PaginationButton = styled.button`
   background-color: ${(props) =>
     props.active ? " var(--color-brand-600)" : "var(--color-grey-50)"};
   color: ${(props) => (props.active ? " var(--color-brand-50)" : "inherit")};
@@ -52,16 +55,22 @@ const P = styled.p`
   }
 `;
 
-function Pagination() {
+function Pagination({count}) {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = Number(searchParams.get('page'))
+  const searchObj = {filter: searchParams.get('filter'), sortBy: searchParams.get('sortBy')}  
+
+  if(Math.ceil(count / PAGE_SIZE) <= 1) return null
+
   return (
     <StyledPagination>
-      <PaginationButton>
+      <PaginationButton onClick={() => setSearchParams({...searchObj, page: page-1})} disabled={page === 1}>
         <HiChevronLeft /> <span>Pervious</span>
       </PaginationButton>
       <P>
-        Showing <span>1</span> to <span>10</span> out of <span>23</span> result
+        Showing <span>{(page - 1) * PAGE_SIZE + 1}</span> to <span>{page === Math.ceil(count / PAGE_SIZE) ? count : page * PAGE_SIZE}</span> out of <span>{count}</span> result
       </P>
-      <PaginationButton>
+      <PaginationButton onClick={() => setSearchParams({...searchObj, page: page+1})} disabled={page === Math.ceil(count / PAGE_SIZE)}>
         <span>Next</span><HiChevronRight />
       </PaginationButton>
     </StyledPagination>
