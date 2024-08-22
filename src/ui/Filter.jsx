@@ -37,10 +37,10 @@ const FilterButton = styled.button`
 
 function Filter({ options, from }) {
   const [searchParams, setSearchParams] = useSearchParams()
-  const searchParamsObj = { filter: searchParams.get('filter'), sortBy: searchParams.get('sortBy') }
+  const searchParamsObj = { filter: searchParams.get('filter'), sortBy: searchParams.get('sortBy'), page: searchParams.get('page') }
 
   const handleClick = value => {
-    setSearchParams({ ...searchParamsObj, filter: value })
+    setSearchParams({ ...searchParamsObj, filter: value, page: 1})
   }
 
   return (
