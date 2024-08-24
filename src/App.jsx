@@ -4,7 +4,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { Toaster } from "react-hot-toast"
 
 import GlobalStyle from './styles/GlobalStyle'
-
+import Booking from './pages/Booking'
 import Account from "./pages/Account"
 import Settings from "./pages/Settings"
 import Users from "./pages/Users"
@@ -38,6 +38,7 @@ function App() {
             <Route exact path="/users" element={<Users />} />
             <Route exact path="/settings" element={<Settings />} />
             <Route exact path="/account" element={<Account />} />
+            <Route exact path="/bookings/:bookingId" element={<Booking/>}/>
           </Route>
           <Route exact path="login" element={<Login />} />
           <Route exact path="*" element={<PageNotFound />} />
