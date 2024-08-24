@@ -1,6 +1,3 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
-
 import Heading from "../ui/Heading";
 import BookingTable from '../features/bookings/BookingTable'
 import BookingTableOperations from '../features/bookings/BookingTableOperations'

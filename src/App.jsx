@@ -7,6 +7,7 @@ import GlobalStyle from './styles/GlobalStyle'
 import Booking from './pages/Booking'
 import Account from "./pages/Account"
 import Settings from "./pages/Settings"
+import CheckIn from './pages/CheckIn'
 import Users from "./pages/Users"
 import Cabins from "./pages/Cabins"
 import Bookings from "./pages/Bookings"
@@ -39,6 +40,7 @@ function App() {
             <Route exact path="/settings" element={<Settings />} />
             <Route exact path="/account" element={<Account />} />
             <Route exact path="/bookings/:bookingId" element={<Booking/>}/>
+            <Route exact path="/checkin/:bookingId" element={<CheckIn/>}/>
           </Route>
           <Route exact path="login" element={<Login />} />
           <Route exact path="*" element={<PageNotFound />} />
