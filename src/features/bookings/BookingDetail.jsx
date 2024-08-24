@@ -1,6 +1,7 @@
 import { useBooking } from "./useBooking";
 import { useNavigate } from "react-router-dom";
 import { useMoveBack } from "../../hooks/useMoveBack";
+import { useCheckout } from "../check-in-out/useCheckout";
 
 import styled from "styled-components";
 import BookingDataBox from "./BookingDataBox";
@@ -11,7 +12,6 @@ import Tag from "../../ui/Tag";
 import ButtonGroup from "../../ui/ButtonGroup";
 import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
-import { useCheckout } from "../check-in-out/useCheckout";
 
 
 const HeadingGroup = styled.div`

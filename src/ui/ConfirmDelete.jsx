@@ -24,7 +24,7 @@ function ConfirmDelete({ resourceName, onConfirm, disabled, onClose }) {
   return (
     <StyledConfirmDelete>
       <Heading as="h3">Delete {resourceName}</Heading>
-      <p style={{marginTop: '1rem'}}>
+      <p style={{ marginTop: '1rem' }}>
         Do you really want to delete {resourceName}?
       </p>
 
@@ -33,7 +33,7 @@ function ConfirmDelete({ resourceName, onConfirm, disabled, onClose }) {
           Cancel
         </Button>
         <Button variation="danger" disabled={disabled} onClick={onConfirm}>
-          Delete
+          {disabled ? 'Deleting...' : 'Delete'}
         </Button>
       </div>
     </StyledConfirmDelete>
