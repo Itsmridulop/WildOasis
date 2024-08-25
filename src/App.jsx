@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { Toaster } from "react-hot-toast"
 
+import ProtectedRoute from './ui/ProtectedRoute'
 import GlobalStyle from './styles/GlobalStyle'
 import Booking from './pages/Booking'
 import Account from "./pages/Account"
@@ -31,7 +32,11 @@ function App() {
       <GlobalStyle />
       <Router>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }>
             <Route index element={<Navigate replace to='/dashboard' />} />
             <Route exact path="/dashboard" element={<Dashboard />} />
             <Route exact path="/bookings" element={<Bookings />} />
@@ -39,8 +44,8 @@ function App() {
             <Route exact path="/users" element={<Users />} />
             <Route exact path="/settings" element={<Settings />} />
             <Route exact path="/account" element={<Account />} />
-            <Route exact path="/bookings/:bookingId" element={<Booking/>}/>
-            <Route exact path="/checkin/:bookingId" element={<CheckIn/>}/>
+            <Route exact path="/bookings/:bookingId" element={<Booking />} />
+            <Route exact path="/checkin/:bookingId" element={<CheckIn />} />
           </Route>
           <Route exact path="login" element={<Login />} />
           <Route exact path="*" element={<PageNotFound />} />
