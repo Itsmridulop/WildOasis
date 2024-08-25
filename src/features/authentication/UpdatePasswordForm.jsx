@@ -1,10 +1,11 @@
+import { Error, FormRow, Label } from "../cabins/CreateCabinForm";
 import { useForm } from "react-hook-form";
+import { useUpdateUser } from "./useUpdateUser";
+
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 
-import { useUpdateUser } from "./useUpdateUser";
 
 function UpdatePasswordForm() {
   const { register, handleSubmit, formState, getValues, reset } = useForm();
@@ -18,10 +19,8 @@ function UpdatePasswordForm() {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow
-        label="Password (min 8 characters)"
-        error={errors?.password?.message}
-      >
+      <FormRow>
+        <Label htmlFor="password">New Password:</Label>
         <Input
           type="password"
           id="password"
@@ -35,12 +34,11 @@ function UpdatePasswordForm() {
             },
           })}
         />
+        {errors?.password?.message && <Error>{errors.password.message}</Error>}
       </FormRow>
 
-      <FormRow
-        label="Confirm password"
-        error={errors?.passwordConfirm?.message}
-      >
+      <FormRow>
+        <Label htmlFor="password">Confirm Password:</Label>
         <Input
           type="password"
           autoComplete="new-password"
@@ -52,6 +50,8 @@ function UpdatePasswordForm() {
               getValues().password === value || "Passwords need to match",
           })}
         />
+        {errors?.passwordConfirm?.message && <Error>{errors.papasswordConfirmssword.message}</Error>}
+
       </FormRow>
       <FormRow>
         <Button onClick={reset} type="reset" variation="secondary">
