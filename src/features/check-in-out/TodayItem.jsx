@@ -1,4 +1,9 @@
+import { Link } from "react-router-dom";
+
+import CheckoutButton from '../check-in-out/CheckoutButton'
 import styled from "styled-components";
+import Button from '../../ui/Button'
+import Tag from '../../ui/Tag'
 
 const StyledTodayItem = styled.li`
   display: grid;
@@ -18,3 +23,21 @@ const StyledTodayItem = styled.li`
 const Guest = styled.div`
   font-weight: 500;
 `;
+
+function TodayItem({ activity }) {
+  const { id, status, guests, number_night } = activity
+  return (
+    <StyledTodayItem>
+      {status === 'unconfirmed' && <Tag type="green">Arriving</Tag>}
+      {status === 'checked-in' && <Tag type="blue">Departing</Tag>}
+      <span>{""}</span>
+      <Guest>{guests.full_name}</Guest>
+      <div >{number_night} night</div>
+      {status === 'unconfirmed' && <Button size='small' as={Link} to={`/checkin/${id}`}>Check In</Button>}
+      {status === 'checked-in' && <CheckoutButton bookingId={id}>Check In</CheckoutButton>}
+    </StyledTodayItem>
+  )
+}
+
+export default TodayItem
+

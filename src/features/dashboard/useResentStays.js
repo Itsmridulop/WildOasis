@@ -12,5 +12,5 @@ export function useResentStays() {
         queryFn: () => getStaysAfterDate(queryDate)
     })
     const confirmedStays = stays?.filter(stay => stay.status === 'checked-in' || stay.status === 'chedcked-out')
-    return { stays,confirmedStays, isLoading }
-} 
+    return { confirmedStays, isLoading }
+}

@@ -9,6 +9,7 @@ import styled from "styled-components";
 import Stats from "./Stats";
 import SalesChart from "./SalesChart";
 import DurationChart from "./DurationChart";
+import TodayActivity from "../check-in-out/TodayActivity";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -22,15 +23,15 @@ function DashboardLayout() {
   const [searchParams] = useSearchParams({ filter: '7' })
   const { cabins, isLoading: isCabinLoading } = useCabin()
   const { bookings, isLoading: isBookingLoading } = useResentBooking()
-  const { stays, confirmedStays, isLoading } = useResentStays()
+  const { confirmedStays, isLoading } = useResentStays()
   useEffect(() => { navigate(`/dashboard?filter=${searchParams.get('filter')}`) }, [])
   if (isLoading || isBookingLoading || isCabinLoading) return <Spinner />
   return (
     <StyledDashboardLayout>
-      <Stats bookings={bookings} confirmedStays={confirmedStays} cabinCount={cabins.length}/>
-      <div>todays activity</div>
-      <DurationChart confirmedStays={confirmedStays}/>
-      <SalesChart bookings={bookings}/>
+      <Stats bookings={bookings} confirmedStays={confirmedStays} cabinCount={cabins.length} />
+      <TodayActivity />
+      <DurationChart confirmedStays={confirmedStays} />
+      <SalesChart bookings={bookings} />
     </StyledDashboardLayout>
   )
 }
