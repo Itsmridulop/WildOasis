@@ -7,6 +7,7 @@ import { useCabin } from '../cabins/useCabin'
 import Spinner from '../../ui/Spinner'
 import styled from "styled-components";
 import Stats from "./Stats";
+import SalesChart from "./SalesChart";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -23,13 +24,12 @@ function DashboardLayout() {
   const { stays, confirmedStays, isLoading } = useResentStays()
   useEffect(() => { navigate(`/dashboard?filter=${searchParams.get('filter')}`) }, [])
   if (isLoading || isBookingLoading || isCabinLoading) return <Spinner />
-  console.log(cabins)
   return (
     <StyledDashboardLayout>
       <Stats bookings={bookings} confirmedStays={confirmedStays} cabinCount={cabins.length}/>
       <div>todays activity</div>
       <div>chart stay duration</div>
-      <div>chat sales</div>
+      <SalesChart bookings={bookings}/>
     </StyledDashboardLayout>
   )
 }
